@@ -251,8 +251,65 @@ class Generator_figfont:
         ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
         return ret_fig
     
-    #def ch_brallie_dots(self) -> Figfont:
-    #    pass
+    def ch_braille_dots(self) -> Figfont:
+        """
+        "Braille" font, show the glyph in "braille".
+        Idea is inspired by drawille <https://github.com/asciimoo/drawille>.
+        
+        :return: A `Figfont` object. See Figfont.
+        :rtype: Figfont
+        """
+        # braille like this: ⣿
+        # every dot marked as:
+        # 0 3
+        # 1 4
+        # 2 5
+        # 6 7
+        # like binary, when the dot is visible, the number on that place is 1 or 0 => 2**i or 0
+        ## for example: [0,1,1,0,1,1,0,0]
+        ## 2**1 + 2**2 + 2**4 + 2**5 = 54 = 0x36
+        # 0x2800 plus that number is the unicode ordinal of target braille
+        ## [0,1,1,0,1,1,0,0] => \u2836 => ⠶
+        ## ==>
+        ## 0 0
+        ## 1 1
+        ## 1 1
+        ## 0 0
+        # note that \u2800 is `⠀`, it is "BRAILLE PATTERN BLANK", not a common space
+        BRAIL_OFFSET = [ # [line + ?, column + ?]
+            [0, 0], #0
+            [1, 0], #1
+            [2, 0], #2
+            [0, 1], #3
+            [1, 1], #4
+            [2, 1], #5
+            [3, 0], #6
+            [3, 1]  #7
+        ]
+        ret_fig = Figfont(height=4, baseline=4, max_length=8+2)
+        iter_bin_dic = iter(self.bin_dic)
+        while True:
+            try:
+                i = next(iter_bin_dic)
+                font_whole = []
+                for line in range(0,16,4):
+                    font_length = len(self.bin_dic[i][line])
+                    font_line = ""
+                    for col in range(0, font_length, 2):
+                        res_ordinal = 0x2800
+                        for dot in range(0, 8):
+                            # [[1 or 0]] * 2**dot
+                            res_ordinal += int(self.bin_dic[i][line+BRAIL_OFFSET[dot][0]][col+BRAIL_OFFSET[dot][1]]) * (1 << dot)
+                        font_line += chr(res_ordinal)
+                    font_whole.append(font_line)
+                ret_fig.font_dic.update({i: font_whole})
+            except StopIteration:
+                break
+        ret_fig.font_comment += "\nThis font's idea is inspired by drawille <https://github.com/asciimoo/drawille>."
+        ret_fig.comment_lines += 1
+        ret_fig.codetag_count = self.codetag_cnt
+        ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
+        return ret_fig
 
 
 ## To Binary String FigFont
@@ -291,6 +348,8 @@ if __name__ == "__main__":
     font_generator = Generator_figfont(default_bin_dic)
     font_solid_box_big = font_generator.ch_filling()
     font_solid_box_small = font_generator.ch_half_block()
+    font_braille_dots = font_generator.ch_braille_dots()
     generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_big.flf", fig_font=font_solid_box_big)
     generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_small.flf", fig_font=font_solid_box_small)
+    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_braille_dots.flf", fig_font=font_braille_dots)
 
