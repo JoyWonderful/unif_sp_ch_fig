@@ -189,4 +189,4 @@
 
 本项目使用的 Unifont 字体在 OFL1.1 和 GPL2.0-or-later 的双重许可下发布。详见同一目录下的 [COPYING](assets/unifont/COPYING.txt) 和 [OFL-1.1](assets/unifont/OFL-1.1.txt)。
 
-本项目生成的字体属于 Unifont 的衍生字体，因此必需在 [OFL1.1](fig-fonts/LICENSE.txt) 许可下发布，本项目生成的字体没有保留名称。~~想不到名字~~
+本项目生成的字体属于 Unifont 的衍生字体，因此必需在 [OFL1.1](fig-fonts/LICENSE.txt) 许可下发布，本项目生成的字体没有保留名称。~~想不到名字。~~
