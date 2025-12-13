@@ -329,7 +329,7 @@ def generate_flf(output_flf:str, fig_font:Figfont):
     for i in range(0x0020, 0x007E+1):
         binary_str_file.write("@\n".join(fig_font.font_dic[i]) + "@@\n")
     for i in range(0, 7): #[0x00C4,0x00D6,0x00DC,0x00E4,0x00F6,0x00FC,0x00DF]
-        binary_str_file.write("@\n"*15 + "@@\n")
+        binary_str_file.write("@\n"*(fig_font.height-1) + "@@\n")
     # end required characters
     # unrequired code tags(主要是中文字符)
     iter_font_dic = iter(fig_font.font_dic)
