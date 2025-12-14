@@ -172,12 +172,16 @@
 
 ## 使用原有字体
 
+通常可以使用 [**Web 页面**](https://unif-fig-jywon.netlify.app/) 生成。
+
 生成的字体均在 `fig-fonts` 目录下。把想要的字体下载再来就好了。  
 或者字体压缩包可以在 [这里](https://drv-jywon.pages.dev/public/unif_sp_ch_fig) 下载。  
 两种渠道都会确保为最新的。
 
 [figlet.js/ts](https://github.com/patorjk/figlet.js) 和 [pyfiglet](https://github.com/pwaller/pyfiglet) 均可以正常使用生成的字体。使用方法请见各自项目的 README，这里不再详细说明。  
 但是原本的用 C 写的 figlet 程序似乎不能正常使用（中文的）这些字体（英文则可以）。
+
+或者，直接使用 `test-font.py`。
 
 ## 使用 `generate.py`
 
