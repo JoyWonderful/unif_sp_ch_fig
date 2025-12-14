@@ -2,6 +2,16 @@ body {
     margin: 0;
     background-color: #eee;
 }
+a {
+    text-decoration: none;
+    color: #555;
+    border-bottom: 1px solid #555;
+    transition: color .3s, border-bottom .3s;
+}
+a:hover {
+    color: #000;
+    border-bottom-color: #000;
+}
 
 .card {
     width: 95%;
@@ -83,4 +93,14 @@ menu#actions button {
 }
 menu#actions button:hover {
     background-color: #ccc;
+}
+
+body > footer {
+    width: 95%;
+    margin: 10px auto;
+}
+body > footer span {
+    font-size: smaller;
+    display: block;
+    opacity: 0.6;
 }

@@ -2,6 +2,7 @@
 <html lang="zh-cn">
     <head>
         <meta charset="utf-8">
+        <title>Text to "Simplified Chinese FIGfont"</title>
         <link rel="stylesheet" href="main.css">
         <script type="module" src="main.mjs"></script>
     </head>
@@ -9,7 +10,6 @@
         <div id="input-area" class="card">
             <div id="input-config">
                 <label>选择一个字体：<select title="input-font" id="input-font"></select></label>
-                <span>chinese_braille_dots 在某些字体下显示不正常，<br>安装 unifont 字体可正常显示，<br>取决于你电脑内的字体，在终端内一定正常。</span>
                 <label>生成宽度：<input type="number" title="winput-idth" id="input-width" placeholder="若无，则无限大"></label>
             </div>
             <textarea title="input-text" id="input-text"></textarea>
@@ -21,5 +21,15 @@
             </menu>
         </div>
         <aside id="prog-info"></aside>
+        <footer>
+            <span>chinese_braille_dots 在某些字体下显示不正常，安装 Unifont 字体可正常显示，取决于你电脑内的字体，在终端内一定正常。</span>
+            <span>在中国境内使用<a href="https://mirrors.tuna.tsinghua.edu.cn/gnu/unifont/" target="_blank" rel="noopener">清华大学开源软件镜像站</a>来更快速地下载 Unifont.</span>
+            <span>
+                <a href="https://github.com/JoyWonderful/unif_sp_ch_fig" target="_blank" rel="noopener">Font generator reponsitory</a>.
+                These FIGfonts are based on <a href="https://www.unifoundry.com/unifont/" target="_blank" rel="noopener">Unifont</a>.
+                Use <a href="https://github.com/patorjk/figlet.js/blob/main/README.md" target="_blank" rel="noopener">figlet.js</a> to parse FIGfonts.
+            </span>
+            <span>Site owner: JoyWonderful</span>
+        </footer>
     </body>
 </html>
