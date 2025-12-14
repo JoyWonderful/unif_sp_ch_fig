@@ -10,6 +10,8 @@ let is_parsed = [];
 var select_input;
 /**@type {HTMLTextAreaElement} */
 var str_input;
+/**@type {HTMLInputElement} */
+var width_input;
 var txt_output = "";
 
 var progInfo = {
@@ -32,7 +34,7 @@ var progInfo = {
 }
 async function get_font(id) {
     if(is_parsed[id] === 0) return;
-    if(is_parsed[id] === 1) {generate_result(id, str_input.value); return;}
+    if(is_parsed[id] === 1) {generate_result(id, str_input.value, width_input.value); return;}
     select_input.disabled = true;
     progInfo.set("正在加载字体，请稍候");
     is_parsed[id] = 0;
@@ -43,18 +45,19 @@ async function get_font(id) {
     select_input.disabled = false;
     progInfo.set("加载完成");
     progInfo.destroy(3000);
-    generate_result(id, str_input.value);
+    generate_result(id, str_input.value, width_input.value);
 }
-function generate_result(id, data) {
+function generate_result(id, data, width) {
     if(is_parsed[id] === undefined) {get_font(id); return;}
     if(is_parsed[id] === 0) return;
     let area_output = document.querySelector("#output-area");
-    txt_output = figlet.textSync(data, {font: FONT_LIST[id]});
+    txt_output = figlet.textSync(data, {font: FONT_LIST[id], width: width==""?undefined:width});
     area_output.innerText = txt_output;
 }
 
 window.addEventListener("DOMContentLoaded", () => {
     select_input = document.querySelector("select#input-font");
+    width_input = document.querySelector("input#input-width");
     str_input = document.querySelector("textarea#input-text");
 
     for(let i = 0; i < FONT_LIST.length; i++) {
@@ -64,7 +67,8 @@ window.addEventListener("DOMContentLoaded", () => {
         select_input.append(new_select_option);
     }
     select_input.addEventListener("input", ()=>{get_font(select_input.value)});
-    str_input.addEventListener("input", ()=>{generate_result(select_input.value,str_input.value)});
+    str_input.addEventListener("input", ()=>{generate_result(select_input.value, str_input.value, width_input.value)});
+    width_input.addEventListener("input", ()=>{generate_result(select_input.value, str_input.value, width_input.value)});
 
     document.querySelector("button#copy").addEventListener("click", () => {
         navigator.clipboard.writeText(txt_output).then(

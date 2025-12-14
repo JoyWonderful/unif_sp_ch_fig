@@ -39,6 +39,12 @@ div#input-area {
     flex-direction: row;
     align-items: center;
 }
+div#input-config {
+    padding-right: 5px;
+}
+div#input-config * {
+    display: block;
+}
 select#input-font {
     margin-bottom:5px;
 }
