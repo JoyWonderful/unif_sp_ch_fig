@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="main.css">
+        <script type="module" src="main.mjs"></script>
+    </head>
+    <body>
+        <div id="input-area" class="card">
+            <div id="input-config">
+                <label>选择一个字体：<select title="input-font" id="input-font"></select></label>
+            </div>
+            <textarea title="input-text" id="input-text"></textarea>
+        </div>
+        <div class="card">
+            <pre id="output-area"></pre>
+            <menu id="actions">
+                <li><button id="copy">复制</button></li>
+            </menu>
+        </div>
+        <aside id="prog-info"></aside>
+    </body>
+</html>
