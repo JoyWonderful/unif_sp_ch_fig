@@ -69,7 +69,11 @@ textarea#input-text {
 }
 
 #output-area {
-    font-family: Unifont, 'Ubuntu Mono', Consolas, 'Courier New', Courier, monospace;
+    font-family: 'Cascadia Code', 'Cascadia Mono',
+        'Cascadia Code NF', 'Cascadia Mono NF',
+        'Cascadia Code PL', 'Cascadia Mono PL',
+        Unifont, 'Ubuntu Mono',
+        Consolas, 'Courier New', Courier, monospace;
     white-space: pre;
     margin-top: 0;
     margin-bottom: 15px;
