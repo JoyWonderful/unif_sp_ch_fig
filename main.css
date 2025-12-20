@@ -19,6 +19,17 @@ a:hover {
     color: #000;
     border-bottom-color: #000;
 }
+button {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: background-color .3s;
+}
+button:hover {
+    background-color: #ccc;
+}
 
 .card {
     width: 95%;
@@ -62,6 +73,9 @@ div#input-config {
 div#input-config * {
     display: block;
 }
+div#input-config > button {
+    padding: 2px 3px;
+}
 select#input-font {
     margin-bottom:5px;
 }
@@ -89,17 +103,6 @@ menu#actions {
 }
 menu#actions li::marker {
     content: none;
-}
-menu#actions button {
-    cursor: pointer;
-    padding: 5px 10px;
-    background-color: #eee;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    transition: background-color .3s;
-}
-menu#actions button:hover {
-    background-color: #ccc;
 }
 
 body > footer {

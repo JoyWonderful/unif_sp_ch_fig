@@ -55,6 +55,21 @@ function generate_result(id, data, width) {
     area_output.innerText = txt_output;
 }
 
+function get_proper_width() {
+    let new_test_el = document.createElement("span");
+    new_test_el.style.fontFamily = "var(--monospace-font-family)";
+    new_test_el.innerText = "a";
+
+    document.body.appendChild(new_test_el);
+    let ch_width = new_test_el.getBoundingClientRect().width;
+    document.body.removeChild(new_test_el);
+    let element_width = document.querySelector("#output-area").getBoundingClientRect().width;
+    let generation_width = Math.round(element_width / ch_width);
+
+    width_input.value = generation_width;
+    generate_result(select_input.value, str_input.value, width_input.value);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
     select_input = document.querySelector("select#input-font");
     width_input = document.querySelector("input#input-width");
@@ -69,6 +84,7 @@ window.addEventListener("DOMContentLoaded", () => {
     select_input.addEventListener("input", ()=>{get_font(select_input.value)});
     str_input.addEventListener("input", ()=>{generate_result(select_input.value, str_input.value, width_input.value)});
     width_input.addEventListener("input", ()=>{generate_result(select_input.value, str_input.value, width_input.value)});
+    document.getElementById("auto-get-width").addEventListener("click", get_proper_width);
 
     document.querySelector("button#copy").addEventListener("click", () => {
         navigator.clipboard.writeText(txt_output).then(
