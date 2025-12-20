@@ -1,3 +1,10 @@
+:root {
+    --monospace-font-family: 'Cascadia Code', 'Cascadia Mono',
+        'Cascadia Code NF', 'Cascadia Mono NF',
+        'Cascadia Code PL', 'Cascadia Mono PL',
+        Unifont, 'Ubuntu Mono',
+        Consolas, 'Courier New', Courier, monospace;
+}
 body {
     margin: 0;
     background-color: #eee;
@@ -65,15 +72,11 @@ textarea#input-text {
     min-width: 60%;
     max-width: 100%;
     min-height: 50px;
-    font-family: 'Ubuntu Mono', Consolas, 'Courier New', Courier, monospace;
+    font-family: var(--monospace-font-family);
 }
 
 #output-area {
-    font-family: 'Cascadia Code', 'Cascadia Mono',
-        'Cascadia Code NF', 'Cascadia Mono NF',
-        'Cascadia Code PL', 'Cascadia Mono PL',
-        Unifont, 'Ubuntu Mono',
-        Consolas, 'Courier New', Courier, monospace;
+    font-family: var(--monospace-font-family);
     white-space: pre;
     margin-top: 0;
     margin-bottom: 15px;
@@ -103,7 +106,7 @@ body > footer {
     width: 95%;
     margin: 10px auto;
 }
-body > footer span {
+body > footer > span {
     font-size: smaller;
     display: block;
     opacity: 0.6;
