@@ -4,10 +4,10 @@
 
 ## 简介
 
-由于没有一个简体中文 ASCII 艺术字，而且自己不会设计字体，所以想到利用一种点阵字体来自动生成 ASCII 艺术字。
+由于没有一个自己喜欢的简体中文 ASCII 艺术字（也很少），而且自己不会设计字体，所以想到利用一种点阵字体来自动生成 ASCII 艺术字。
 
 这个程序使用 [Unifont](https://unifoundry.com/unifont/) 来生成（主要是简体中文的） FIGlet 字体。  
-如果您加以改动，可以把 Unifont 内任何字形都转换为
+如果您加以改动，可以把 Unifont 内任何字形都转换为 FIGlet 字体。
 
 ## 说明
 
@@ -463,3 +463,4 @@
 本项目使用的 Unifont 字体在 OFL1.1 和 GPL2.0-or-later 的双重许可下发布。详见同一目录下的 [COPYING](assets/unifont/COPYING.txt) 和 [OFL-1.1](assets/unifont/OFL-1.1.txt)。
 
 本项目生成的字体属于 Unifont 的衍生字体，因此必需在 [OFL1.1](fig-fonts/LICENSE.txt) 许可下发布，本项目生成的字体没有保留名称。~~想不到名字。~~
+
