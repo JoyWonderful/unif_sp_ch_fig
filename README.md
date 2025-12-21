@@ -1,5 +1,7 @@
 # 基于 Unifont 生成的简体中文 FIGlet 字体
 
+![banner](assets/readme/banner.png)
+
 ## 简介
 
 由于没有一个简体中文 ASCII 艺术字，而且自己不会设计字体，所以想到利用一种点阵字体来自动生成 ASCII 艺术字。
