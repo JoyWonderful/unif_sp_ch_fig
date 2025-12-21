@@ -2,7 +2,10 @@ import figlet from "./figlet.mjs";
 
 const FONT_DIR = ["fonts/"];
 const FONT_EXT = ".flf";
-const FONT_LIST = ["chinese_braille_dots", "chinese_solid_box_big", "chinese_solid_box_small"];
+const FONT_LIST = [
+    "chinese_ascii_small", "chinese_ascii_big", 
+    "chinese_solid_box_small", "chinese_solid_box_big", "chinese_braille_dots"
+];
 
 // undefined: haven't parsed yet; 0: be parsing; 1: have already parsed
 let is_parsed = [];
