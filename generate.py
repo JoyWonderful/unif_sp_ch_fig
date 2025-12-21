@@ -219,11 +219,15 @@ class Generator_figfont:
         ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
         return ret_fig
     
-    def ch_half_block(self) -> Figfont:
+    def ch_half_block(self, corres:dict[str,dict[str, str]]={}) -> Figfont:
         """
         Just like `ch_filling`, but combine 2 lines to 1 line.\n\n\
         The most common used.
         
+        :param corres: Optional. Like `{"0":{"0":" ","1":"▄"},"1":{"0":"▀","1":"█"}}`\n\n\
+            The first 0,1 corresponds the first line is filled or not.\n\n\
+            The second 0,1 corresponds the second line.
+        :type corres: dict
         :return: A `Figfont` object. See Figfont.
         :rtype: Figfont
         """
@@ -231,7 +235,8 @@ class Generator_figfont:
         UPPER_BLOCK = "\u2580"
         LOWER_BLOCK = "\u2584"
         FULL_BLOCK = "\u2588"
-        CH_CORRES = {"0":{"0":" ","1":LOWER_BLOCK},"1":{"0":UPPER_BLOCK,"1":FULL_BLOCK}}
+        if corres!={}: CH_CORRES = corres
+        else: CH_CORRES = {"0":{"0":" ","1":LOWER_BLOCK},"1":{"0":UPPER_BLOCK,"1":FULL_BLOCK}}
         ret_fig = Figfont(height=8, baseline=7, max_length=16+2)
         iter_bin_dic = iter(self.bin_dic)
         while True:
@@ -253,7 +258,7 @@ class Generator_figfont:
     
     def ch_braille_dots(self) -> Figfont:
         """
-        "Braille" font, show the glyph in "braille".
+        "Braille" font, show the glyph in "braille".\n\n\
         Idea is inspired by drawille <https://github.com/asciimoo/drawille>.
         
         :return: A `Figfont` object. See Figfont.
@@ -352,4 +357,8 @@ if __name__ == "__main__":
     generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_big.flf", fig_font=font_solid_box_big)
     generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_small.flf", fig_font=font_solid_box_small)
     generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_braille_dots.flf", fig_font=font_braille_dots)
+    font_ascii_big = font_generator.ch_filling(ch_fill="#%", ch_blank=".,")
+    font_ascii_small = font_generator.ch_half_block(corres={"0":{"0":" ","1":","},"1":{"0":"'","1":";"}})
+    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_ascii_big.flf", fig_font=font_ascii_big)
+    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_ascii_small.flf", fig_font=font_ascii_small)
 
