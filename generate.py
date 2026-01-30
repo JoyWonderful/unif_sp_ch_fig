@@ -90,8 +90,8 @@ def generate_bin_dic(flf_scope_arr:list=FLF_SCOPE_ARR) -> dict:
         for i in range(scope[0], scope[1]+1):
             bin_str = ""
             hex_ch:str = dic[i]
-            line_break_cnt = 4 # when to break(based on hex digits)
-            if(len(hex_ch) == 32): line_break_cnt = 2
+            line_break_cnt = 4 # when to break(based on hex digits) # hex_ch=64, width:2ch (e.g: 乐)
+            if(len(hex_ch) == 32): line_break_cnt = 2 # width:1ch (e.g: A)
             cnt = 0 # how many hex digits have read for each line?
             # begin convert hex to bin string
             for ch in hex_ch:
@@ -312,6 +312,189 @@ class Generator_figfont:
                 break
         ret_fig.font_comment += "\nThis font's idea is inspired by drawille <https://github.com/asciimoo/drawille>."
         ret_fig.comment_lines += 1
+        ret_fig.codetag_count = self.codetag_cnt
+        ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
+        return ret_fig
+    def ch_box_drawing(self, style="bold", split_block=True) -> Figfont:
+        """
+        Use box drawing characters to draw every block.
+        
+        :param style: The style(flavour) of box drawing. \n\n\
+            The expected values are: `bold`, `normal`, `double`, `borad`. See below. \n\n\
+            ```
+        "bold":  ["━","┏","┓","┗","┛","┣","┫","┳","┻","╋","┃"],
+        "normal":["─","┌","┐","└","┘","├","┤","┬","┴","┼","│"],
+        "double":["═","╔","╗","╚","╝","╠","╣","╦","╩","╬","║"],
+        "borad": ["─","╭","╮","╰","╯","├","┤","┬","┴","┼","│"]
+            ```
+        :type style: str
+        :param split_block: Split the blocks. \n\n\
+            ```
+        False: ┏━┳━┓
+               ┗━┻━┛
+        True:  ┏━━━┓
+               ┗━━━┛
+            ```
+        :type split_block: bool
+        :return: A `Figfont` object. See Figfont.
+        :rtype: Figfont
+        """
+        BT = { #BOX_DRAWING_TABLE
+            "bold":  ["\u2501","\u250f","\u2513","\u2517","\u251b","\u2523","\u252b","\u2533","\u253b","\u254b","\u2503"],
+            "normal":["\u2500","\u250c","\u2510","\u2514","\u2518","\u251c","\u2524","\u252c","\u2534","\u253c","\u2502"],
+            "double":["\u2550","\u2554","\u2557","\u255a","\u255d","\u2560","\u2563","\u2566","\u2569","\u256c","\u2551"],
+            "borad": ["\u2500","\u256d","\u256e","\u2570","\u256f","\u251c","\u2524","\u252c","\u2534","\u253c","\u2502"]
+            #"bold":  ["━","┏","┓","┗","┛","┣","┫","┳","┻","╋","┃"],
+            #"normal":["─","┌","┐","└","┘","├","┤","┬","┴","┼","│"],
+            #"double":["═","╔","╗","╚","╝","╠","╣","╦","╩","╬","║"],
+            #"borad": ["─","╭","╮","╰","╯","├","┤","┬","┴","┼","│"]
+            ##########  0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10
+        }
+        ret_fig = Figfont(height=17, baseline=15, max_length=33+2)
+        iter_bin_dic = iter(self.bin_dic)
+        if(style not in BT): # style not in BT.keys()
+            raise ValueError(f"`style` agrument must be in {list(BT.keys())}")
+        # Let me declare how the generator work, it's a bit complex.
+        # There's a full glyph: (The unifont glyph is 16*16)
+        ## ┏━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┳━┓
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┣━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━╋━┫
+        ## ┗━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┻━┛
+        ## 16+1 lines, 16*2+1 columns.
+        ## The '+1' corresponds the last line and the last column.
+        ## The '*2' due to `━` after the connecting character(like `┏`).
+        # For each 0,1 in the bin_dic, we only consider the connecting character.
+        # `1`,`2`,`3`,`4` is the area of block, `|`,`-`,`+` is the area of box drawing characters.
+        # We are considering the `+` in the image below:
+        ## 2 | 1
+        ## --+--
+        ## 3 | 4
+        # The block is filled with the "0","1" from the bin_dic.
+        # The block area is given value:
+        ## 2^1|2^0
+        ## ---+---
+        ## 2^2|2^3
+        # If we calculate the value (in binary) as i, we'll use the `boxt[i]` value
+        #split_block=False; <=> True.
+        ## 0b0000:
+        ### 0| 0     0| 0
+        ### -  - <=> -  -
+        ### 0| 0     0| 0
+        ## 0b0001:
+        ### 0| 1     0| 1
+        ### -┗━- <=> -┗━-
+        ### 0| 0     0| 0
+        ## 0b0010:
+        ### 1| 0     1| 0
+        ### -┛ - <=> -┛ -
+        ### 0| 0     0| 0
+        ## 0b0011:
+        ### 1| 1     1| 1
+        ### -┻━- <=> -━━-
+        ### 0| 0     0| 0
+        ## 0b0100:
+        ### 0| 0     0| 0
+        ### -┓ - <=> -┓ -
+        ### 1| 0     1| 0
+        ## 0b0101:
+        ### 0| 1     0| 1
+        ### -╋━- <=> -╋━-
+        ### 1| 0     1| 0
+        ## 0b0110:
+        ### 1| 0     1| 0
+        ### -┫ - <=> -┃ -
+        ### 1| 0     1| 0
+        ## 0b0111:
+        ### 1| 1     1| 1
+        ### -╋━- <=> -┏━-
+        ### 1| 0     1| 0
+        ## 0b1000:
+        ### 0| 0     0| 0
+        ### -┏━- <=> -┏━-
+        ### 0| 1     0| 1
+        ## 0b1001:
+        ### 0| 1     0| 1
+        ### -┣━- <=> -┃ -
+        ### 0| 1     0| 1
+        ## 0b1010:
+        ### 1| 0     1| 0
+        ### -╋━- <=> -╋━-
+        ### 0| 1     0| 1
+        ## 0b1011:
+        ### 1| 1     1| 1
+        ### -╋━- <=> -┓ -
+        ### 0| 1     0| 1
+        ## 0b1100:
+        ### 0| 0     0| 0
+        ### -┳━- <=> -━━-
+        ### 1| 1     1| 1
+        ## 0b1101:
+        ### 0| 1     0| 1
+        ### -╋━- <=> -┛ -
+        ### 1| 1     1| 1
+        ## 0b1110:
+        ### 1| 0     1| 0
+        ### -╋━- <=> -┗━-
+        ### 1| 1     1| 1
+        ## 0b1111:
+        ### 1| 1     1| 1
+        ### -╋━- <=> -  -
+        ### 1| 1     1| 1
+        bs = BT[style]
+        boxt = []
+        if(split_block):
+            #      0b0000,0b0001=1,    0b0010=2,  0b0011=3,    0b0100=4,  0b0101=5,    0b0110=6,   0b0111=7,    0b1000=8,    0b1001=9,    0b1010=10,   1b1011=11, 0b1100=12,   0b1101=13, 0b1110=14,   0b1111=15
+            boxt = ["  ", bs[3]+bs[0], bs[4]+" ", bs[0]+bs[0], bs[2]+" ", bs[9]+bs[0], bs[10]+" ", bs[1]+bs[0], bs[1]+bs[0], bs[10]+" ",  bs[9]+bs[0], bs[2]+" ", bs[0]+bs[0], bs[4]+" ", bs[3]+bs[0], "  "]
+        else:
+            #      0b0000,0b0001=1,    0b0010=2,  0b0011=3,    0b0100=4,  0b0101=5,    0b0110=6,  0b0111=7,    0b1000=8,    0b1001=9,    0b1010=10,   1b1011=11,   0b1100=12,   0b1101=13,   0b1110=14,   0b1111=15
+            boxt = ["  ", bs[3]+bs[0], bs[4]+" ", bs[8]+bs[0], bs[2]+" ", bs[9]+bs[0], bs[6]+" ", bs[9]+bs[0], bs[1]+bs[0], bs[5]+bs[0], bs[9]+bs[0], bs[9]+bs[0], bs[7]+bs[0], bs[9]+bs[0], bs[9]+bs[0], bs[9]+bs[0]]
+        while True:
+            try:
+                i = next(iter_bin_dic)
+                font_whole = []
+                # In the loop, the position is given(if the position isn't accessible, the value is 0<=>"0"):
+                ## line-1,col-1 | line-1,col
+                ## -------------+-----------
+                ##  line,col-1  |  line,col
+                # The variable name:
+                ## b | a
+                ## --+--
+                ## c | d
+                for line in range(0,16+1): # 0->16
+                    font_length = len(self.bin_dic[i][line])
+                    bi:list = self.bin_dic[i]
+                    font_line = ""
+                    for col in range(0, font_length+1): # 0->8 or 16
+                        # The code is a whole shit... Please forgive me.
+                        a=b=c=d=-1
+                        if(line-1 < 0) :      a=b=0
+                        elif(col-1 < 0):      b=c=0
+                        elif(line > 15):      c=d=0
+                        elif(col>font_length):a=d=0
+                        if(a!=-1): a=int(bi[line-1][col])
+                        if(b!=-1): b=int(bi[line-1][col-1])
+                        if(c!=-1): c=int(bi[line][col-1])
+                        if(d!=-1): d=int(bi[line][col])
+                        # end of this
+                        font_line += boxt[a + b*2 + c*4 + d*8]
+                    font_line.removesuffix(" ") # The end of the line is like `┏━┳━┓ `, We should remove the ` ` suffix
+                    font_whole.append(font_line)
+                ret_fig.font_dic.update({i: font_whole})
+            except StopIteration:
+                break
         ret_fig.codetag_count = self.codetag_cnt
         ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
         return ret_fig
