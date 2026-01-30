@@ -317,8 +317,9 @@ class Generator_figfont:
         return ret_fig
     def ch_box_drawing(self, style="bold", split_block=True) -> Figfont:
         """
-        Use box drawing characters to draw every block.
-        
+        Use box drawing characters to draw every block.\n\n\
+        **Notes**: 撇、捺越多的字，字越密(Unifont 16*16 像素而言)，生成的字形越抽象。
+
         :param style: The style(flavour) of box drawing. \n\n\
             The expected values are: `bold`, `normal`, `double`, `borad`. See below. \n\n\
             ```
@@ -490,7 +491,7 @@ class Generator_figfont:
                         if(d==-1): d=int(bi[line][col])
                         # end of this
                         font_line += boxt[a + b*2 + c*4 + d*8]
-                    font_line.removesuffix(" ") # The end of the line is like `┏━┳━┓ `, We should remove the ` ` suffix
+                    font_line = font_line.removesuffix(" ") # The end of the line is like `┏━┳━┓ `, We should remove the ` ` suffix
                     font_whole.append(font_line)
                 ret_fig.font_dic.update({i: font_whole})
             except StopIteration:
