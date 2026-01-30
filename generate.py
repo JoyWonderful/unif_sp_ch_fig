@@ -330,9 +330,9 @@ class Generator_figfont:
         :type style: str
         :param split_block: Split the blocks. \n\n\
             ```
-        False: ┏━┳━┓
+        True:  ┏━┳━┓
                ┗━┻━┛
-        True:  ┏━━━┓
+        False: ┏━━━┓
                ┗━━━┛
             ```
         :type split_block: bool
@@ -388,7 +388,7 @@ class Generator_figfont:
         ## ---+---
         ## 2^2|2^3
         # If we calculate the value (in binary) as i, we'll use the `boxt[i]` value
-        #split_block=False; <=> True.
+        #split_block=True; <=> False.
         ## 0b0000:
         ### 0| 0     0| 0
         ### -  - <=> -  -
@@ -456,15 +456,16 @@ class Generator_figfont:
         bs = BT[style]
         boxt = []
         if(split_block):
-            #      0b0000,0b0001=1,    0b0010=2,  0b0011=3,    0b0100=4,  0b0101=5,    0b0110=6,   0b0111=7,    0b1000=8,    0b1001=9,    0b1010=10,   1b1011=11, 0b1100=12,   0b1101=13, 0b1110=14,   0b1111=15
-            boxt = ["  ", bs[3]+bs[0], bs[4]+" ", bs[0]+bs[0], bs[2]+" ", bs[9]+bs[0], bs[10]+" ", bs[1]+bs[0], bs[1]+bs[0], bs[10]+" ",  bs[9]+bs[0], bs[2]+" ", bs[0]+bs[0], bs[4]+" ", bs[3]+bs[0], "  "]
-        else:
             #      0b0000,0b0001=1,    0b0010=2,  0b0011=3,    0b0100=4,  0b0101=5,    0b0110=6,  0b0111=7,    0b1000=8,    0b1001=9,    0b1010=10,   1b1011=11,   0b1100=12,   0b1101=13,   0b1110=14,   0b1111=15
             boxt = ["  ", bs[3]+bs[0], bs[4]+" ", bs[8]+bs[0], bs[2]+" ", bs[9]+bs[0], bs[6]+" ", bs[9]+bs[0], bs[1]+bs[0], bs[5]+bs[0], bs[9]+bs[0], bs[9]+bs[0], bs[7]+bs[0], bs[9]+bs[0], bs[9]+bs[0], bs[9]+bs[0]]
+        else:
+            #      0b0000,0b0001=1,    0b0010=2,  0b0011=3,    0b0100=4,  0b0101=5,    0b0110=6,   0b0111=7,    0b1000=8,    0b1001=9,    0b1010=10,   1b1011=11, 0b1100=12,   0b1101=13, 0b1110=14,   0b1111=15
+            boxt = ["  ", bs[3]+bs[0], bs[4]+" ", bs[0]+bs[0], bs[2]+" ", bs[9]+bs[0], bs[10]+" ", bs[1]+bs[0], bs[1]+bs[0], bs[10]+" ",  bs[9]+bs[0], bs[2]+" ", bs[0]+bs[0], bs[4]+" ", bs[3]+bs[0], "  "]
         while True:
             try:
                 i = next(iter_bin_dic)
                 font_whole = []
+                font_length = len(self.bin_dic[i][0])
                 # In the loop, the position is given(if the position isn't accessible, the value is 0<=>"0"):
                 ## line-1,col-1 | line-1,col
                 ## -------------+-----------
@@ -474,20 +475,19 @@ class Generator_figfont:
                 ## --+--
                 ## c | d
                 for line in range(0,16+1): # 0->16
-                    font_length = len(self.bin_dic[i][line])
                     bi:list = self.bin_dic[i]
                     font_line = ""
                     for col in range(0, font_length+1): # 0->8 or 16
                         # The code is a whole shit... Please forgive me.
                         a=b=c=d=-1
                         if(line-1 < 0) :      a=b=0
-                        elif(col-1 < 0):      b=c=0
-                        elif(line > 15):      c=d=0
-                        elif(col>font_length):a=d=0
-                        if(a!=-1): a=int(bi[line-1][col])
-                        if(b!=-1): b=int(bi[line-1][col-1])
-                        if(c!=-1): c=int(bi[line][col-1])
-                        if(d!=-1): d=int(bi[line][col])
+                        if(col-1 < 0):      b=c=0
+                        if(line > 15):      c=d=0
+                        if(col>font_length-1):a=d=0
+                        if(a==-1): a=int(bi[line-1][col])
+                        if(b==-1): b=int(bi[line-1][col-1])
+                        if(c==-1): c=int(bi[line][col-1])
+                        if(d==-1): d=int(bi[line][col])
                         # end of this
                         font_line += boxt[a + b*2 + c*4 + d*8]
                     font_line.removesuffix(" ") # The end of the line is like `┏━┳━┓ `, We should remove the ` ` suffix
@@ -534,14 +534,21 @@ def generate_flf(output_flf:str, fig_font:Figfont):
 if __name__ == "__main__":
     default_bin_dic:dict = generate_bin_dic()
     font_generator = Generator_figfont(default_bin_dic)
+    OUT_PREFIX = "fig-fonts/chinese_"
+    CUROUT = CURRENT_DIR+OUT_PREFIX 
+
     font_solid_box_big = font_generator.ch_filling()
     font_solid_box_small = font_generator.ch_half_block()
     font_braille_dots = font_generator.ch_braille_dots()
-    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_big.flf", fig_font=font_solid_box_big)
-    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_solid_box_small.flf", fig_font=font_solid_box_small)
-    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_braille_dots.flf", fig_font=font_braille_dots)
+    generate_flf(output_flf=CUROUT+"solid_box_big.flf", fig_font=font_solid_box_big)
+    generate_flf(output_flf=CUROUT+"solid_box_small.flf", fig_font=font_solid_box_small)
+    generate_flf(output_flf=CUROUT+"braille_dots.flf", fig_font=font_braille_dots)
+
+    # font_block_bold = font_generator.ch_box_drawing()
+    # generate_flf(output_flf=CUROUT+"test.flf", fig_font=font_block_bold)
+
     font_ascii_big = font_generator.ch_filling(ch_fill="#%", ch_blank=".,")
     font_ascii_small = font_generator.ch_half_block(corres={"0":{"0":" ","1":","},"1":{"0":"'","1":";"}})
-    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_ascii_big.flf", fig_font=font_ascii_big)
-    generate_flf(output_flf=CURRENT_DIR+"fig-fonts/chinese_ascii_small.flf", fig_font=font_ascii_small)
+    generate_flf(output_flf=CUROUT+"ascii_big.flf", fig_font=font_ascii_big)
+    generate_flf(output_flf=CUROUT+"ascii_small.flf", fig_font=font_ascii_small)
 
