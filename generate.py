@@ -318,7 +318,9 @@ class Generator_figfont:
     def ch_box_drawing(self, style="bold", split_block=True) -> Figfont:
         """
         Use box drawing characters to draw every block.\n\n\
-        **Notes**: 撇、捺越多的字，字越密(Unifont 16*16 像素而言)，生成的字形越抽象。
+        **Notes**: 撇、捺越多的字，字越密(Unifont 16*16 像素而言)，生成的字形越抽象。\n  
+        撇捺较多时，参数 `split_block=True`(default) 会好一些；\n  
+        字形较密(e.g `槽`在 `True` 时右半声旁有点抽象)时 `False` 会好一些。
 
         :param style: The style(flavour) of box drawing. \n\n\
             The expected values are: `bold`, `normal`, `double`, `borad`. See below. \n\n\
@@ -545,8 +547,22 @@ if __name__ == "__main__":
     generate_flf(output_flf=CUROUT+"solid_box_small.flf", fig_font=font_solid_box_small)
     generate_flf(output_flf=CUROUT+"braille_dots.flf", fig_font=font_braille_dots)
 
-    # font_block_bold = font_generator.ch_box_drawing()
-    # generate_flf(output_flf=CUROUT+"test.flf", fig_font=font_block_bold)
+    font_block_bold_split = font_generator.ch_box_drawing()
+    font_block_bold = font_generator.ch_box_drawing(split_block=False)
+    font_block_split = font_generator.ch_box_drawing(style="normal")
+    font_block = font_generator.ch_box_drawing(style="normal", split_block=False)
+    font_block_double_split = font_generator.ch_box_drawing(style="double")
+    font_block_double = font_generator.ch_box_drawing(style="double", split_block=False)
+    font_block_borad_split = font_generator.ch_box_drawing(style="borad")
+    font_block_borad = font_generator.ch_box_drawing(style="borad", split_block=False)
+    generate_flf(output_flf=CUROUT+"block_bold_split.flf", fig_font=font_block_bold_split)
+    generate_flf(output_flf=CUROUT+"block_bold.flf", fig_font=font_block_bold)
+    generate_flf(output_flf=CUROUT+"block_split.flf", fig_font=font_block_split)
+    generate_flf(output_flf=CUROUT+"block.flf", fig_font=font_block)
+    generate_flf(output_flf=CUROUT+"block_double_split.flf", fig_font=font_block_double_split)
+    generate_flf(output_flf=CUROUT+"block_double.flf", fig_font=font_block_double)
+    generate_flf(output_flf=CUROUT+"block_borad_split.flf", fig_font=font_block_borad_split)
+    generate_flf(output_flf=CUROUT+"block_borad.flf", fig_font=font_block_borad)
 
     font_ascii_big = font_generator.ch_filling(ch_fill="#%", ch_blank=".,")
     font_ascii_small = font_generator.ch_half_block(corres={"0":{"0":" ","1":","},"1":{"0":"'","1":";"}})
