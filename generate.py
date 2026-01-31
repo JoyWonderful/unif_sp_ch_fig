@@ -27,7 +27,7 @@ from dataclasses import dataclass, field
 UNIFONT_VERSION = "17.0.03"
 CURRENT_DIR = path.dirname(path.abspath(__file__)) + "/" # ./
 INPUT_FILE = CURRENT_DIR + "assets/unifont/unifont.hex"
-INPUT_SP_CHINESE_CH_FILE = CURRENT_DIR + "assets/gb2312-chinese.modify.txt"
+INPUT_SP_CHINESE_CH_FILE = CURRENT_DIR + "assets/level-1.txt" # 一级字, 3500 个
 OUTPUT_JSON = CURRENT_DIR + "assets/unifont/unifont.json"
 FLF_SCOPE_ARR = [
     #[0x0020, 0x007E], # Part of "Controls and basic latin". The necessary FIGfont
