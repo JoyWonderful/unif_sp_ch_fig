@@ -4,7 +4,8 @@ const FONT_DIR = ["fonts/"];
 const FONT_EXT = ".flf";
 const FONT_LIST = [
     "chinese_ascii_small", "chinese_ascii_big", 
-    "chinese_solid_box_small", "chinese_solid_box_big", "chinese_braille_dots"
+    "chinese_solid_box_small", "chinese_solid_box_big", "chinese_braille_dots",
+    "chinese_block", "chinese_block_split", "chinese_block_bold", "chinese_block_bold_split", "chinese_block_double", "chinese_block_double_split", "chinese_block_borad", "chinese_block_borad_split"
 ];
 
 // undefined: haven't parsed yet; 0: be parsing; 1: have already parsed
