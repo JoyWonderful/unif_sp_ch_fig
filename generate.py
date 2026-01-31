@@ -315,6 +315,7 @@ class Generator_figfont:
         ret_fig.codetag_count = self.codetag_cnt
         ret_fig.font_header = f"flf2a$ {self._attribute_str(ret_fig)}\n{ret_fig.font_comment}\n"
         return ret_fig
+    
     def ch_box_drawing(self, style="bold", split_block=True) -> Figfont:
         """
         Use box drawing characters to draw every block.\n\n\

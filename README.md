@@ -14,25 +14,31 @@
 `generate.py` 是主要的程序，可以用来生成 `.flf` 字体文件。  
 
 生成的 `.flf` 字体文件不宜过大，否则 FIGdriver 读取太慢了，因此有方法控制字形范围。  
-可以通过更改内部 `FLF_SCOPE_ARR` 变量来控制生成的额外的 FIGlet 字形范围，即除去 [`U+0020-U+007E`, `U+00C4`, `U+00D6`, `U+00DC`, `U+00E4`, `U+00F6`, `U+00FC`, `U+00DF`] 之外（详见 <http://www.jave.de/figlet/figfont.html#requiredfigchar>）的字形范围。*格式为 `[[start, stop]]`。*  
-通过更改 `assets/gb2312-chinese-modify.txt` 来控制生成的码位不连续的字形（简中字符，或者你任何想要的字符），那是是我从 GB2312 简体中文字符集里删掉一堆不常用字而来的。`assets/gb2312-chinese-origin.txt` 是原本的 GB2312 简体中文字符集（6763 个），这个文件没有实质用处，只是方便比较删去的字形。*两个文件的格式都是一行一个字符。*  
-`assets/removed-level3.txt` 是三级字表，这个文件也没有实质用处，方便确定一定删去的字形。
+可以通过更改内部 `FLF_SCOPE_ARR` 变量来控制生成的额外的 FIGlet 字形范围，即除去 [`U+0020-U+007E`, `U+00C4`, `U+00D6`, `U+00DC`, `U+00E4`, `U+00F6`, `U+00FC`, `U+00DF`] 的必须字符之外（详见 <http://www.jave.de/figlet/figfont.html#requiredfigchar>）的字形范围。*格式为 `[[start, stop]]`。*  
+通过更改 `assets/level-1.txt`（3500 个，未改动的一级字表，基本是不能删的了）来控制生成的码位不连续的字形（简中字符，或者你任何想要的字符）；  
+或者更改代码里的 `INPUT_SP_CHINESE_CH_FILE` 为 `assets/gb2312-chinese.origin.txt`/`assets/gb2312-chinese.modify.txt`。
+
+- `assets/level-1.txt`: 3500 个，未改动的一级字表，基本是不能删的了；
+- `assets/gb2312-chinese.modify.txt`: 是我从 GB2312 简体中文字符集里删掉一堆不常用字而来的；
+- `assets/gb2312-chinese.origin.txt`: 6763 个，是原本的 GB2312 简体中文字符集，方便比较删去的字形；
+  - *以上三个文件的格式都是一行一个字符。*
+- `assets/removed-level3.txt` 是三级字表，方便确定最好要删去的字形。
 
 `assets/unifont/` 下是 Unifont 的 `.hex` 文件（`assets/unifont/unifont.json` 是程序生成的），版本号参见 `generate.py` 内的 `UNIFONT_VERSION` 常量。
 
 生成的字体均在 `fig-fonts` 目录下。
 
-`test-font.py` 可以测试生成的 FIGlet 字体。其实也是本地使用该 FIGlet 字体的一种方式。  
+`test-font.py` 可以测试生成的 FIGlet 字体，自动复制。其实也是本地使用该 FIGlet 字体的一种方式。  
 （您应该确保已运行 `pyfiglet -L <name.flf>`，即想要使用的 FIGlet 字体文件已在 `<package_folder>/pyfiglet/fonts/` 下）
 
 ## 字体风格
 
-有五种字体风格：
+有 13 种字体风格：
 
 <details>
-<summary><code>ch_filling</code> => <code>solid_box_big</code>(4.76MiB, 5'000'716Bytes):</summary>
+<summary><code>ch_filling</code> => <code>solid_box_big</code>(2.92MiB, 3'072'821Bytes):</summary>
 
-这个字体文件是最大的，实测 pyfiglet 读取 ~12s。  
+这个字体文件是比较大的。  
 在等宽字体下才能显示正常。
 
 ```
@@ -142,9 +148,8 @@
 </details>
 
 <details>
-<summary><code>ch_half_block</code> => <code>chinese_solid_box_small</code>(1.53MiB, 1'613'490Bytes):</summary>
+<summary><code>ch_half_block</code> => <code>solid_box_small</code>(968KiB, 991'289Bytes):</summary>
 
-实测 pyfiglet 读取 ~4s。  
 在等宽字体下才能显示正常。
 
 ```
@@ -182,9 +187,8 @@
 </details>
 
 <details>
-<summary><code>ch_braille_dots</code> => <code>braille_dots</code>(677KiB, 693'976Bytes):</summary>
+<summary><code>ch_braille_dots</code> => <code>braille_dots</code>(421KiB, 431'769Bytes):</summary>
 
-实测 pyfiglet 读取 ~2s。  
 在盲文字符为等宽的字体下才能显示正常，所以下面显示的可能不对劲。  
 在终端中显示一定正常。
 
@@ -230,10 +234,9 @@
 </details>
 
 <details>
-<summary><code>ch_filling</code> => <code>ascii_big</code>(3.13MiB, 3'286'324Bytes):</summary>
+<summary><code>ch_filling</code> => <code>ascii_big</code>(1.94MiB, 2'044'633Bytes):</summary>
 
-`solid_box_big` 的纯 ascii 版本。  
-实测 pyfiglet 读取 ~10s。
+`solid_box_big` 的纯 ascii 版本。
 
 ```
 .,.,.,.,.,.,#%.,.,.,.,.,.,.,.,.,.,.,.,.,.,.,#%.,.,.,.,.,.,.,.,.,.,.,.,#%.,.,.,.,.,#%.,.,.,.,.,.,
@@ -358,10 +361,9 @@
 </details>
 
 <details>
-<summary><code>ch_half_block</code> => <code>ascii_small</code>(924KiB, 946'730Bytes):</summary>
+<summary><code>ch_half_block</code> => <code>ascii_small</code>(575KiB, 589'175Bytes):</summary>
 
-`solid_box_small` 的纯 ascii 版本。  
-实测 pyfiglet 读取 ~3s。
+`solid_box_small` 的纯 ascii 版本。
 
 ```
    ;''''''';          ;           ,,,,,,,,,,,         ',           ;''''''';     ,,,,,,,,,,,,,, 
@@ -434,6 +436,23 @@
  ;,,,'   ',,,,'  ',,,';    ;;               ;   
                                                 
 ```
+
+</details>
+
+<details>
+<summary><code>ch_box_drawing</code> => <code>block_*_split</code>系列(3.95MiB, 4'144'934Bytes):</summary>
+
+使用 Box Drawing 字符（用来画表格的）的字体。分割每个格子。  
+// 4 种，太多了，去 `fig-fonts` 下看吧。
+
+</details>
+
+<details>
+<summary><code>ch_box_drawing</code> => <code>block_*</code>系列(3.74MiB, 3'922'494Bytes):</summary>
+
+同 `block_*_split`，空心版本。  
+// 4 种，太多了，去 `fig-fonts` 下看吧。  
+<span style="color:transparent!important">// 这个 README 已经接近 500 行了。</span>
 
 </details>
 
