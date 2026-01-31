@@ -460,7 +460,8 @@
 
 ## 使用原有字体
 
-通常可以使用 [**Web 页面**](https://unif-fig-jywon.pages.dev/) 生成。
+通常可以使用 [**Web 页面**](https://unif-fig-jywon.pages.dev/) 生成文段。  
+如果 Web 页很慢，clone branch `pages` 然后再开一个本地服务器(`python -m http.server`) 也可以。
 
 生成的字体均在 `fig-fonts` 目录下。把想要的字体下载再来就好了。  
 或者字体压缩包可以在 [这里](https://drv-jywon.pages.dev/unif_sp_ch_fig) 下载。  
