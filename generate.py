@@ -24,7 +24,7 @@ import json
 from os import path
 from dataclasses import dataclass, field
 
-UNIFONT_VERSION = "17.0.04"
+UNIFONT_VERSION = "18.0.01"
 CURRENT_DIR = path.dirname(path.abspath(__file__)) + "/" # ./
 INPUT_FILE = CURRENT_DIR + "assets/unifont/unifont.hex"
 INPUT_SP_CHINESE_CH_FILE = CURRENT_DIR + "assets/level-1.txt" # 一级字, 3500 个
